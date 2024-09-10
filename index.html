@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TO-DO LIST</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <!-- <h1 class="text-red-500" onclick="test()">Hello, Nguyen Minh Nghia</h1> -->
+
+    <div class="container">
+        <header class="w-full h-[160px] flex justify-between items-end font-normal text-[16px] pr-[30px] pb-[10px]">
+            <div class="w-[200px] h-[150px] flex items-center ml-6">
+                <img class="w-auto h-auto object-cover overflow-hidden" src="./header-logo.png" alt="header-logo">
+            </div>
+
+            <div class="flex items-center p-[10px] rounded[-10px] gap-[2px] bg-[#000] text-white mb-5">
+                <button id="openModal"> + Add new item</button>
+            </div>
+        </header>
+
+        <!-- Modal -->
+        <section id="modal" class="flex items-center justify-center fixed inset-0 z-2 hidden">
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+            <div
+                class="relative z-3 flex flex-col justify-center gap-1.5 w-[450px] p-5 min-h-[250px] bg-[white] border border-[#ddd] rounded-[15px]">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-semibold">Add new todo</h3>
+                    <button id="closeModal" class="py-1 px-3 bg-[#eee] aspect-square rounded-[50%]">x</button>
+                </div>
+
+                <form id="todoForm">
+                    <div class="relative mb-3">
+                        <input
+                            class="w-full py-3 px-4 border border-[#ddd] rounded-[5px] text-sm outline-none peer form-input"
+                            type="text" id="category" placeholder=" ">
+                        <label
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-sm text-gray-400 pointer-events-none transition-all peer-focus:top-0 peer-focus:bg-white peer-focus:px-2 form-label"
+                            for="category" id="category">Category</label>
+                    </div>
+
+                    <div class="relative mb-3">
+                        <input
+                            class="w-full py-3 px-4 border border-[#ddd] rounded-[5px] text-sm outline-none peer form-input"
+                            type="text" id="title" placeholder=" ">
+                        <label
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-sm text-gray-400 pointer-events-none transition-all peer-focus:top-0 peer-focus:bg-white peer-focus:px-2 form-label"
+                            for="title" id="title">Title</label>
+                    </div>
+
+                    <div class="relative mb-3">
+                        <input
+                            class="w-full py-3 px-4 border border-[#ddd] rounded-[5px] text-sm outline-none peer form-input"
+                            type="text" id="content" placeholder=" ">
+                        <label
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-sm text-gray-400 pointer-events-none transition-all peer-focus:top-0 peer-focus:bg-white peer-focus:px-2 form-label"
+                            for="content" id="content">Content</label>
+                    </div>
+                    <div>
+                        <input
+                            class="w-full mb-2 cursor-pointer border-0 inline-block py-3 px-6 font-bold bg-black text-white rounded-[5px] text-center text-base"
+                            type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <main>
+            <div
+                class="flex flex-col justify-start lex-wrap flex-start gap-[30px] max-w-[342px] mx-auto px-4 md:flex-row md:max-w-[1086px]">
+                <!-- Todo Column -->
+                <div class="w-[342px]">
+                    <!-- header -->
+                    <div class="bg-[#00a6da] flex justify-between text-white py-[2px] px-[10px]">
+                        <!-- title -->
+                        <span>
+                            Todo
+                        </span>
+                        <!-- count -->
+                        <span id="todo-count">
+                            0
+                        </span>
+                    </div>
+
+                    <!-- divider -->
+                    <div class="w-full h-[2px] bg-[#00a6da] my-[10px]"></div>
+
+                    <!-- list -->
+                    <div id="todo-list" class="flex flex-col gap-2 min-h-[500px]"
+                        ondrop="handleDropZone(event, 'todo-list')" ondragover="handleDragOver(event)">
+
+                    </div>
+                </div>
+
+                <!-- Doing Column -->
+                <div class="w-[342px]">
+                    <!-- header -->
+                    <div class="bg-[#e1d173] flex justify-between text-white py-[2px] px-[10px]">
+                        <!-- title -->
+                        <span>
+                            Doing
+                        </span>
+                        <!-- count -->
+                        <span id="doing-count">
+                            0
+                        </span>
+                    </div>
+
+                    <!-- divider -->
+                    <div class="w-full h-[2px] bg-[#e1d173] my-[10px]"></div>
+
+                    <!-- list -->
+                    <div id="doing-list" class="flex flex-col gap-2 min-h-[500px]"
+                        ondrop="handleDropZone(event, 'doing-list')" ondragover="handleDragOver(event)">
+
+                    </div>
+                </div>
+
+                <!-- Finish Column -->
+                <div class="w-[342px]">
+                    <!-- header -->
+                    <div class="bg-[#3abf56] flex justify-between text-white py-[2px] px-[10px]">
+                        <!-- title -->
+                        <span>
+                            Finish
+                        </span>
+                        <!-- count -->
+                        <span id="finish-count">
+                            0
+                        </span>
+                    </div>
+
+                    <!-- divider -->
+                    <div class="w-full h-[2px] bg-[#3abf56] my-[10px]"></div>
+
+                    <!-- list -->
+                    <div id="finish-list" class="flex flex-col gap-2 min-h-[500px]"
+                        ondrop="handleDropZone(event, 'finish-list')" ondragover="handleDragOver(event)">
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <script src="main.js"></script>
+</body>
+
+</html>
