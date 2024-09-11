@@ -26,7 +26,7 @@ function createListElement(array) {
                             <p class="text-xs">${item.category}</p>
                             <div class="flex gap-2">
                             <img onclick="editItem(${item.id})" class="w-[20px] h-[20px]" src="./edit-icon.svg" alt="edit-icon">
-                            <img onclick="deleteItem(${item.id})" class="w-[20px] h-[20px]" src="./delete-icon.svg" alt="delete-icon">
+                            <img onclick="openConfirmModal(${item.id})" class="w-[20px] h-[20px]" src="./delete-icon.svg" alt="delete-icon">
                             </div>
                         </div>
 
@@ -159,42 +159,69 @@ function handleDropZone(event, destinationListId) {
   render();
 }
 
+let deleteId = null;
+
+const confirmModal = document.getElementById("confirm-modal");
+
+const openConfirmModal = (id) => {
+  deleteId = id;
+  confirmModal.classList.remove("hidden");
+};
+
+const closeConfirmModal = document.getElementById("cancelBtn");
+
+closeConfirmModal.addEventListener("click", () => {
+  confirmModal.classList.add("hidden");
+  deleteId = null;
+});
+
 const deleteItem = (id) => {
   const index = todos.findIndex((item) => item.id === id);
   todos.splice(index, 1);
   render();
 };
 
-const modal = document.getElementById("modal");
-const openModal = document.getElementById("openModal");
-const closeModal = document.getElementById("closeModal");
+const deleteButton = document.getElementById("deleteBtn");
+deleteButton.addEventListener("click", (deleteId) => {
+  if (deleteId != null) {
+    deleteItem(deleteId);
+  }
 
-openModal.addEventListener("click", () => {
-  isEditing = false;
-  updateModalTitle();
-  modal.classList.remove("hidden");
+  confirmModal.classList.add("hidden");
+
+  deleteId = null;
 });
 
-closeModal.addEventListener("click", () => {
-  modal.classList.add("hidden");
+const updateModal = document.getElementById("update-modal");
+const openUpdateModal = document.getElementById("openUpdateModal");
+const closeUpdateModal = document.getElementById("closeUpdateModal");
+
+openUpdateModal.addEventListener("click", () => {
+  isEditing = false;
+  updateModalTitle();
+  updateModal.classList.remove("hidden");
+});
+
+closeUpdateModal.addEventListener("click", () => {
+  updateModal.classList.add("hidden");
 });
 
 window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    modal.classList.add("hidden");
+  if (event.target === updateModal) {
+    updateModal.classList.add("hidden");
   }
 });
 
 let isEditing = false;
 let currentEditId = null;
 
-const modalTitle = document.querySelector("#modal h3");
+const updateModalTitle = document.querySelector("#update-modal h3");
 
-const updateModalTitle = () => {
+const handleChangeUpdateModalTitle = () => {
   if (isEditing) {
-    modalTitle.textContent = "Update todo";
+    updateModalTitle.textContent = "Update todo";
   } else {
-    modalTitle.textContent = "Add new todo";
+    updateModalTitle.textContent = "Add new todo";
   }
 };
 
@@ -210,9 +237,9 @@ const editItem = (id) => {
   isEditing = true;
   currentEditId = id;
 
-  updateModalTitle();
+  handleChangeUpdateModalTitle();
 
-  modal.classList.remove("hidden");
+  updateModal.classList.remove("hidden");
 };
 
 const form = document.getElementById("todoForm");
@@ -259,7 +286,7 @@ form.addEventListener("submit", (event) => {
 
   render();
 
-  modal.classList.add("hidden");
+  updateModal.classList.add("hidden");
 
   form.reset();
 });
