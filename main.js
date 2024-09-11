@@ -198,7 +198,7 @@ const closeUpdateModal = document.getElementById("closeUpdateModal");
 
 openUpdateModal.addEventListener("click", () => {
   isEditing = false;
-  updateModalTitle();
+  handleChangeUpdateModalTitle();
   updateModal.classList.remove("hidden");
 });
 
