@@ -92,6 +92,7 @@ function render() {
 render();
 
 function handleDragStart(event) {
+  loader.style.display = "block";
   event.dataTransfer.setData("text", event.target.id);
 }
 
@@ -106,6 +107,7 @@ function handleDropZone(event, destinationListId) {
 
   if (!cardItem) {
     console.log("Not found card by id: ", cardId);
+    loader.style.display = "none";
     return;
   }
 
@@ -169,6 +171,8 @@ function handleDropZone(event, destinationListId) {
   // re-render
   render();
 
+  loader.style.display = "none";
+
   showMoveSuccessToast(listName);
 }
 
@@ -197,9 +201,15 @@ const deleteItem = (id) => {
 const deleteButton = document.getElementById("deleteBtn");
 deleteButton.addEventListener("click", (deleteId) => {
   if (deleteId != null) {
-    deleteItem(deleteId);
+    loader.style.display = "block";
 
-    showDeleteSuccessToast();
+    setTimeout(() => {
+      deleteItem(deleteId);
+
+      loader.style.display = "none";
+
+      showDeleteSuccessToast();
+    }, 500);
   }
 
   confirmModal.classList.add("hidden");
@@ -259,18 +269,24 @@ const editItem = (id) => {
 
 const form = document.getElementById("todoForm");
 
+const loader = document.querySelector(".loader");
+
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
   //   console.log("Form submitted successfully");
+
+  loader.style.display = "block";
 
   const category = document.getElementById("category").value;
   const title = document.getElementById("title").value;
   const content = document.getElementById("content").value;
 
   if (category === "" || title === "" || content === "") {
-    showUpdateWarningToast();
-    // alert("Please fill in all information!");
+    setTimeout(() => {
+      loader.style.display = "none";
+      showUpdateWarningToast();
+    }, 500);
     return;
   }
 
@@ -285,7 +301,10 @@ form.addEventListener("submit", (event) => {
         content,
       };
 
-    showUpdateSuccessToast();
+    setTimeout(() => {
+      loader.style.display = "none";
+      showUpdateSuccessToast();
+    }, 500);
 
     isEditing = false;
     currentEditId = null;
@@ -301,7 +320,10 @@ form.addEventListener("submit", (event) => {
 
     todos.push(newTodo);
 
-    showAddSuccessToast();
+    setTimeout(() => {
+      loader.style.display = "none";
+      showAddSuccessToast();
+    }, 500);
   }
 
   render();
@@ -372,7 +394,7 @@ const toast = ({
     // Auto remove toast
     const autoRemoveId = setTimeout(function () {
       main.removeChild(toast);
-    }, duration + 1000);
+    }, duration + 500);
 
     // Remove toast when clicked
     toast.onclick = function (e) {
@@ -391,7 +413,7 @@ const toast = ({
 
     const icon = icons[type];
 
-    const delay = (duration / 1000).toFixed(2);
+    const delay = (duration / 500).toFixed(2);
 
     toast.classList.add("toast", `toast--${type}`);
 
