@@ -116,6 +116,8 @@ function handleDropZone(event, destinationListId) {
     (item) => Number(item.id) !== Number(cardId)
   );
 
+  let listName = "";
+
   switch (destinationListId) {
     case "todo-list": {
       const updateTodo = {
@@ -126,6 +128,9 @@ function handleDropZone(event, destinationListId) {
       const newTodos = [...updatedTodos, updateTodo];
 
       todos = newTodos;
+
+      listName = "To-do";
+
       break;
     }
     case "doing-list": {
@@ -137,6 +142,9 @@ function handleDropZone(event, destinationListId) {
       const newTodos = [...updatedTodos, updateTodo];
 
       todos = newTodos;
+
+      listName = "Doing";
+
       break;
     }
     case "finish-list": {
@@ -148,6 +156,9 @@ function handleDropZone(event, destinationListId) {
       const newTodos = [...updatedTodos, updateTodo];
 
       todos = newTodos;
+
+      listName = "Finish";
+
       break;
     }
 
@@ -157,6 +168,8 @@ function handleDropZone(event, destinationListId) {
 
   // re-render
   render();
+
+  showMoveSuccessToast(listName);
 }
 
 let deleteId = null;
@@ -185,6 +198,8 @@ const deleteButton = document.getElementById("deleteBtn");
 deleteButton.addEventListener("click", (deleteId) => {
   if (deleteId != null) {
     deleteItem(deleteId);
+
+    showDeleteSuccessToast();
   }
 
   confirmModal.classList.add("hidden");
@@ -254,7 +269,8 @@ form.addEventListener("submit", (event) => {
   const content = document.getElementById("content").value;
 
   if (category === "" || title === "" || content === "") {
-    alert("Please fill in all information!");
+    showUpdateWarningToast();
+    // alert("Please fill in all information!");
     return;
   }
 
@@ -269,6 +285,8 @@ form.addEventListener("submit", (event) => {
         content,
       };
 
+    showUpdateSuccessToast();
+
     isEditing = false;
     currentEditId = null;
   } else {
@@ -282,6 +300,8 @@ form.addEventListener("submit", (event) => {
     };
 
     todos.push(newTodo);
+
+    showAddSuccessToast();
   }
 
   render();
@@ -290,3 +310,105 @@ form.addEventListener("submit", (event) => {
 
   form.reset();
 });
+
+const showAddSuccessToast = () => {
+  toast({
+    title: "Success!",
+    message: "New to-do added successfully.",
+    type: "success",
+    duration: 5000,
+  });
+};
+
+const showUpdateSuccessToast = () => {
+  toast({
+    title: "Success!",
+    message: "To-do updated successfully.",
+    type: "success",
+    duration: 5000,
+  });
+};
+
+const showUpdateWarningToast = () => {
+  toast({
+    title: "Warning!",
+    message: "Please fill in all the required information.",
+    type: "warning",
+    duration: 5000,
+  });
+};
+
+const showMoveSuccessToast = (listName) => {
+  toast({
+    title: "Success!",
+    message: `Task successfully moved to the "${listName}" list.`,
+    type: "success",
+    duration: 5000,
+  });
+};
+
+const showDeleteSuccessToast = () => {
+  toast({
+    title: "Success!",
+    message: "Todo successfully deleted.",
+    type: "success",
+    duration: 5000,
+  });
+};
+
+// Toast function
+
+const toast = ({
+  title = "",
+  message = "",
+  type = "info",
+  duration = 3000,
+}) => {
+  const main = document.getElementById("toast");
+
+  if (main) {
+    const toast = document.createElement("div");
+
+    // Auto remove toast
+    const autoRemoveId = setTimeout(function () {
+      main.removeChild(toast);
+    }, duration + 1000);
+
+    // Remove toast when clicked
+    toast.onclick = function (e) {
+      if (e.target.closest(".toast__close")) {
+        main.removeChild(toast);
+        clearTimeout(autoRemoveId);
+      }
+    };
+
+    const icons = {
+      success: "fas fa-check-circle",
+      info: "fas fa-info-circle",
+      warning: "fas fa-exclamation-circle",
+      error: "fas fa-exclamation-circle",
+    };
+
+    const icon = icons[type];
+
+    const delay = (duration / 1000).toFixed(2);
+
+    toast.classList.add("toast", `toast--${type}`);
+
+    toast.style.animation = `slideInLeft ease .3s, fadeOut linear 1s ${delay}s forwards`;
+
+    toast.innerHTML = `<div class="toast__icon text-2xl py-0 px-4">
+    <i class="${icon}"></i>
+    </div>
+    <div class="grow">
+    <h3 class="text-base font-semibold color-[#333]">${title}</h3>
+    <p class="text-sm text-[#888] mt-1.5 leading-normal">${message}</p>
+    </div>
+    <div class="toast__close py-0 px-4 text-xl text-[#0000004d] cursor-pointer">
+    <i class="fas fa-times"></i>
+    </div>
+    `;
+
+    main.appendChild(toast);
+  }
+};
