@@ -372,7 +372,7 @@ const showMoveSuccessToast = (listName) => {
 const showDeleteSuccessToast = () => {
   toast({
     title: "Success!",
-    message: "Todo successfully deleted.",
+    message: "To-do successfully deleted.",
     type: "success",
     duration: 5000,
   });
