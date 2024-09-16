@@ -231,6 +231,8 @@ closeUpdateModal.addEventListener("click", () => {
   updateModal.classList.add("hidden");
 });
 
+const modalOverlay = document.getElementById("modal-overlay");
+
 window.addEventListener("click", (event) => {
   if (event.target === updateModal) {
     updateModal.classList.add("hidden");
