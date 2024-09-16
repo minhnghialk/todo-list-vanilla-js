@@ -233,8 +233,9 @@ closeUpdateModal.addEventListener("click", () => {
 
 const modalOverlay = document.getElementById("modal-overlay");
 
+// When the user clicks anywhere outside of the modal, close the modal
 window.addEventListener("click", (event) => {
-  if (event.target === updateModal) {
+  if (event.target === modalOverlay) {
     updateModal.classList.add("hidden");
   }
 });
