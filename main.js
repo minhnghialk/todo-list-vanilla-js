@@ -244,11 +244,14 @@ let isEditing = false;
 let currentEditId = null;
 
 const updateModalTitle = document.querySelector("#update-modal h3");
+const statusField = document.getElementById("status-field");
 
 const handleChangeUpdateModalTitle = () => {
   if (isEditing) {
+    statusField.classList.remove("hidden");
     updateModalTitle.textContent = "Update todo";
   } else {
+    statusField.classList.add("hidden");
     updateModalTitle.textContent = "Add new todo";
   }
 };
@@ -261,6 +264,7 @@ const editItem = (id) => {
   todo.category = document.getElementById("category");
   todo.title = document.getElementById("title");
   todo.content = document.getElementById("content");
+  todo.type = document.getElementById("status");
 
   isEditing = true;
   currentEditId = id;
@@ -284,6 +288,7 @@ form.addEventListener("submit", (event) => {
   const category = document.getElementById("category").value;
   const title = document.getElementById("title").value;
   const content = document.getElementById("content").value;
+  const type = document.getElementById("status").value;
 
   if (category === "" || title === "" || content === "") {
     setTimeout(() => {
@@ -302,6 +307,7 @@ form.addEventListener("submit", (event) => {
         category,
         title,
         content,
+        type,
       };
 
     setTimeout(() => {

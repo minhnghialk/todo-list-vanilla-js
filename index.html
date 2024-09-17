@@ -70,11 +70,22 @@
                             class="absolute left-4 top-1/2 transform -translate-y-1/2 text-sm text-gray-400 pointer-events-none transition-all peer-focus:top-0 peer-focus:bg-white peer-focus:px-2 form-label"
                             for="content" id="content">Content</label>
                     </div>
+
+                    <div id="status-field" class="relative mb-3">
+                        <select name="status" id="status"
+                            class="w-full py-3 px-4 border border-[#ddd] rounded-[5px] text-sm outline-none peer form-select">
+                            <option value="todo">To-do</option>
+                            <option value="doing">Doing</option>
+                            <option value="finish">Finish</option>
+                        </select>
+                        <label for="status"
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-sm text-gray-400 pointer-events-none transition-all peer-focus:top-0 peer-focus:bg-white peer-focus:px-2 form-label">Status</label>
+                    </div>
+
                     <div>
                         <input
                             class="w-full mb-2 cursor-pointer border-0 inline-block py-3 px-6 font-bold bg-black text-white rounded-[5px] text-center text-base"
                             type="submit" value="Submit">
-                    </div>
                 </form>
             </div>
         </section>

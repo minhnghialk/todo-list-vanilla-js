@@ -33,6 +33,38 @@ select {
   background-color: white;
 }
 
+.form-select {
+  appearance: none;
+  background-color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.form-select:focus + .form-label,
+.form-select:not(:placeholder-shown) + .form-label {
+  top: 0;
+  background-color: white;
+  padding: 0 8px;
+  z-index: 2;
+}
+
+.form-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.2s ease;
+  pointer-events: none;
+  color: #9ca3af;
+}
+
+.peer:focus + .form-label {
+  top: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+  background-color: white;
+}
+
 /* Toast message */
 
 .toast {
